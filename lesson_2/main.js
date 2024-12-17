@@ -1,25 +1,48 @@
 const getLength = (data) => {
   const typeData = typeof data;
-
-  if (typeData === "string") {
-    return data.length;
-  }
-  if (typeData === "number" || typeData === "bigint") {
-    return data.toString().length;
-  }
-  if (typeData === "object") {
-    if (Array.isArray(data)) {
-      return data.length;
+  let result;
+  if (typeData === "function") {
+    result = data.length;
+  } else if (typeData === "string") {
+    result = data.length;
+  } else if (typeData === "number" || typeData === "bigint") {
+    result = data.toString().length;
+  } else if (typeData === "object") {
+    if (data === null) {
+      result = 0;
+    } else if (Array.isArray(data)) {
+      result = data.length;
+    } else if (isPsevdoArray(data)) {
+      result = data.length;
+    } else if (isSetOrMap(data)) {
+      result = data.size;
     } else {
-      return Object.keys(data).length;
+      result = Object.keys(data).length;
     }
+  } else {
+    result = 0;
   }
-  return 0
-  
+  console.log(result);
 };
 
-data = [true, false, [10, 23, 24], {'35345': '2342', "erwe": 2354}, undefined, 'test', 'test1', 12n,12,'foo']
+function isPsevdoArray(data) {
+  if (data === null) {
+    return false;
+  }
+  let dataKeys = Object.keys(data);
+  if (dataKeys.includes("length")) {
+    return dataKeys.every((el) => {
+      return Number.isInteger(+el) || el === "length";
+    });
+  } else {
+    return false;
+  }
+}
 
-data.forEach(element => {
-    console.log(typeof element,  getLength(element))
-});
+function isSetOrMap(data) {
+  if (data.constructor === Set || data.constructor === Map) {
+    return true;
+  } else {
+    return false;
+  }
+}
