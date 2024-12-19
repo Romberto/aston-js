@@ -1,23 +1,23 @@
-const getLength = (data) => {
+export const getLength = (data) => {
   const typeData = typeof data;
   let result;
   if (typeData === "function") {
     result = data.length;
   } else if (typeData === "string") {
     result = data.length;
-  } else if (typeData === "number" || typeData === "bigint") {
-    result = data.toString().length;
   } else if (typeData === "object") {
     if (data === null) {
       result = 0;
     } else if (Array.isArray(data)) {
       result = data.length;
-    } else if (isPsevdoArray(data)) {
-      result = data.length;
     } else if (isSetOrMap(data)) {
       result = data.size;
     } else {
-      result = Object.keys(data).length;
+      if (isPsevdoArray(data)) {
+        result = data.length;
+      } else {
+        result = Object.keys(data).length;
+      }
     }
   } else {
     result = 0;
@@ -26,9 +26,6 @@ const getLength = (data) => {
 };
 
 function isPsevdoArray(data) {
-  if (data === null) {
-    return false;
-  }
   let dataKeys = Object.keys(data);
   if (dataKeys.includes("length")) {
     return dataKeys.every((el) => {
