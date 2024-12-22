@@ -69,3 +69,16 @@ export function getCopyObject(obj) {
   });
   return result;
 }
+
+// реверс строки
+
+export function reverseStr(str) {
+  return str.split(",").reverse().join();
+}
+
+// сравнение двух объектов
+
+export const deepEqual = (obj1, obj2) => {
+  _.isEqual(obj1, obj2);
+};
+
